@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Морской кролик & версия в игре Pressure</title>
+  <style>
+    :root{
+      --bg:#0e1223; --bg-2:#151a2e; --text:#e9edff; --muted:#a2accd;
+      --accent:#6aa7ff; --accent-2:#7fffca; --card:#1a2040; --border:rgba(255,255,255,.08);
+      --ok:#45d483; --warn:#ffcc66; --bad:#ff7d7d; --shadow:0 12px 28px rgba(0,0,0,.35);
+      --r:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; display:flex; color:var(--text);
+      background: radial-gradient(1200px 600px at 20% 0%, #14204a 0%, transparent 60%) #0b0f20;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      width:270px; padding:22px 18px; position:sticky; top:0; height:100vh;
+      background:rgba(17,23,48,.7); backdrop-filter: blur(8px); border-right:1px solid var(--border);
+    }
+    .brand{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+    .logo{
+      width:36px; height:36px; border-radius:10px; display:grid; place-items:center;
+      background:radial-gradient(110% 110% at 20% 20%, var(--accent-2), var(--accent));
+      color:#06101d; font-weight:900; box-shadow:0 6px 18px rgba(122,255,202,.35);
+    }
+    .brand h1{font-size:18px; margin:0}
+    nav a{
+      display:block; text-decoration:none; color:var(--text); padding:10px 12px; border-radius:10px;
+      margin:6px 0; transition:.2s; border:1px solid transparent;
+    }
+    nav a:hover{ background:var(--bg-2); border-color:var(--border) }
+    .tip{font-size:12px; color:var(--muted); margin-top:8px}
+
+    /* Content */
+    .content{flex:1; min-width:0; padding:26px; overflow:auto}
+
+    /* Hero / баннер с кнопкой-ссылкой */
+    .hero{
+      display:grid; gap:18px; grid-template-columns: 1.3fr .9fr; align-items:stretch;
+    }
+    .banner{
+      background:linear-gradient(180deg, rgba(106,167,255,.18), rgba(127,255,202,.08));
+      border:1px solid var(--border); border-radius:var(--r); padding:22px; box-shadow:var(--shadow);
+    }
+    .banner h2{margin:0 0 6px}
+    .banner p{margin:0; color:var(--muted)}
+    .cta{
+      display:inline-flex; align-items:center; gap:10px; margin-top:14px;
+      padding:10px 14px; border-radius:10px; font-weight:800; text-decoration:none;
+      background:var(--accent-2); color:#07131f; box-shadow:0 10px 22px rgba(127,255,202,.28);
+    }
+    .cta:hover{ filter:brightness(1.04) }
+    .card{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:18px; box-shadow:var(--shadow);
+    }
+    .card h3{margin:0 0 8px}
+
+    /* Tabs */
+    .tabs{display:flex; gap:8px; margin-top:10px}
+    .tab{
+      flex:1; text-align:center; padding:10px; border-radius:10px; cursor:pointer; user-select:none;
+      border:1px solid var(--border); background:var(--bg-2); color:var(--muted); font-weight:700;
+    }
+    .tab.active{background:linear-gradient(180deg,#243058,#1a2040); color:var(--text); border-color:transparent}
+    .panel{display:none; margin-top:12px}
+    .panel.active{display:block}
+
+    /* Grid */
+    .grid{display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top:18px}
+
+    /* Facts */
+    .fact{display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-bottom:1px dashed var(--border)}
+    .fact:last-child{border-bottom:none}
+    .badge{padding:2px 8px; border-radius:20px; font-size:12px; font-weight:800; white-space:nowrap}
+    .ok{background:rgba(69,212,131,.14); color:var(--ok)}
+    .warn{background:rgba(255,204,102,.14); color:var(--warn)}
+    .bad{background:rgba(255,125,125,.14); color:var(--bad)}
+
+    /* Table */
+    table{width:100%; border-collapse:collapse; margin-top:8px; border:1px solid var(--border)}
+    th,td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--border)}
+    th{background:#1d2350}
+
+    /* Галерея */
+    .pic{
+      aspect-ratio: 16 / 9; width:100%; border-radius:12px; overflow:hidden; border:1px solid var(--border);
+      background:#0c1226 center/cover no-repeat;
+    }
+
+    /* Footer mini */
+    .footer{margin:24px 0 8px; color:var(--muted); font-size:13px; text-align:center}
+    @media (max-width: 900px){
+      .hero{grid-template-columns: 1fr}
+      .sidebar{position:fixed; inset:auto 0 0 0; height:auto; display:flex; gap:10px; align-items:center; z-index:10}
+      .content{padding-top:96px}
+      nav{display:flex; gap:8px; overflow:auto}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Сайдбар -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">JP</div>
+      <h1>Морской кролик</h1>
+    </div>
+    <nav>
+      <a href="#intro">Вступление</a>
+      <a href="#nature">Природа</a>
+      <a href="#pressure">Версия в Pressure</a>
+      <a href="#compare">Сравнение</a>
+      <a href="#links">Ссылки</a>
+    </nav>
+    <div class="tip">Нажимай пункты — плавная прокрутка ✨</div>
+  </aside>
+
+  <!-- Контент -->
+  <main class="content">
+    <!-- Баннер + кнопка-ссылка -->
+    <section id="intro" class="hero">
+      <div class="banner">
+        <h2>🐰 Что за «морской кролик»?</h2>
+        <p><b>Jorunna parva</b> — миниатюрный морской слизень из тропических вод. Прославился,
+          потому что внешне напоминает пушистого кролика: «уши» — это ринфофоры (органы обоняния).</p>
+        <!-- ВСТАВЬ СВОЮ ССЫЛКУ В href -->
+        <a class="cta" id="heroLink" href="https://www.youtube.com/watch?v=L5xN3efoXrk&list=PL_WWmcphRkqGOFKW8sjmQdPcTnruHrcvf" target="_blank" rel="noopener">
+          🔗 Открыть подробности
+        </a>
+      </div>
+
+      <div class="card">
+        <h3>Природа / Игра — быстрый обзор</h3>
+        <div class="tabs">
+          <div class="tab active" data-tab="tab-nature">Природа</div>
+          <div class="tab" data-tab="tab-pressure">Pressure</div>
+        </div>
+        <div class="panel active" id="tab-nature">
+          <div class="fact"><span class="badge ok">Размер</span> 1–2 см — очень маленький.</div>
+          <div class="fact"><span class="badge ok">Внешность</span> Белый/желтоватый, покрыт микровыростами, «ушки»-ринфофоры.</div>
+          <div class="fact"><span class="badge warn">Среда</span> Тёплые воды Индо-Тихоокеанского региона.</div>
+          <div class="fact"><span class="badge ok">Рацион</span> Питается губками, может накапливать токсины для защиты.</div>
+        </div>
+        <div class="panel" id="tab-pressure">
+          <div class="fact"><span class="badge ok">Роль</span> Атмосферный моб/питомец/декор, подчёркивающий морскую тематику.</div>
+          <div class="fact"><span class="badge warn">Дизайн</span> Яркие фантазийные окраски, иногда свечение или «коррапт-варианты».</div>
+          <div class="fact"><span class="badge ok">Геймплей</span> Может давать подсветку, очищать зону от токсинов или служить компаньоном.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Природа -->
+    <section id="nature" class="grid">
+      <article class="card">
+        <h3>Биология</h3>
+        <p>Относится к голожаберным моллюскам. «Шёрстка» — это крохотные бугорки (цераты), увеличивающие площадь поверхности.
+           Ринфофоры улавливают химические сигналы в воде, помогая находить пищу.</p>
+      </article>
+      <article class="card">
+        <h3>Защита</h3>
+        <p>Питаясь губками, Jorunna parva способен аккумулировать их химические соединения — это снижает риск быть съеденным.</p>
+      </article>
+      <article class="card">
+        <h3>Распространение</h3>
+        <p>Замечен у берегов Японии, Филиппин, Индонезии и др. в тёплых морях. Встречается на небольших глубинах.</p>
+      </article>
+      <article class="card">
+        <h3>Галерея</h3>
+        <!-- ЗАМЕНИ src НА СВОИ ИЗОБРАЖЕНИЯ -->
+        <div class="pic" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/5/5c/Jorunna_parva%2C_Osezaki.jpg')"></div>
+      </article>
+    </section>
+
+    <!-- Версия в игре Pressure -->
+    <section id="pressure" class="grid">
+      <article class="card">
+        <h3>Дизайн в игре</h3>
+        <p>Сохраняет «кроличий» силуэт, но получает стилизацию: сияние, необычные окрасы, анимации. Может иметь «corrupt»-варианты.</p>
+      </article>
+      <article class="card">
+        <h3>Поведение</h3>
+        <p>Часто пассивен, но способен помогать игроку: подсвечивать тёмные зоны, реагировать на опасность, служить маркером пути.</p>
+      </article>
+      <article class="card">
+        <h3>Возможные способности</h3>
+        <ul>
+          <li>🔹 «Светляк»: кратковременная подсветка вокруг игрока.</li>
+          <li>🔹 «Чистая вода»: ослабление токсичных эффектов поблизости.</li>
+          <li>🔹 «Чуйка»: трели/сигналы при приближении угроз.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Скрин/арт</h3>
+        <!-- ЗАМЕНИ картинку на арт из Pressure -->
+        <div class="pic" style="background-image:url('https://static.wikia.nocookie.net/pressure/images/d/df/Deep_Sea_Bunny_dancing.gif/revision/latest?cb=20241219000845')"></div>
+      </article>
+    </section>
+
+    <!-- Сравнение -->
+    <section id="compare" class="card">
+      <h3>Природа vs Pressure — сравнение</h3>
+      <table>
+        <thead>
+          <tr><th>Характеристика</th><th>Реальный морской кролик</th><th>Версия в Pressure</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Размер</td>
+            <td>1–2 см</td>
+            <td>Крупнее для читаемости на экране</td>
+          </tr>
+          <tr>
+            <td>Окрас</td>
+            <td>Белый/желтоватый, иногда пятнистый</td>
+            <td>Фантазийные цвета, свечение</td>
+          </tr>
+          <tr>
+            <td>«Ушки»</td>
+            <td>Ринфофоры (обоняние)</td>
+            <td>Стилизованы как ушки для узнаваемости</td>
+          </tr>
+          <tr>
+            <td>Роль</td>
+            <td>Часть морской экосистемы</td>
+            <td>Если вам дадут какой-либо предмет, Глубоководному Кролику придется его взять и дать вам что-то, что он посчитает «равным», но иногда это может быть как больше, так и меньше первоначальной стоимости предмета.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Ссылки/кнопки -->
+    <section id="links" class="grid">
+      <article class="card">
+        <h3>Официальная страница / вики</h3>
+        <!-- ВСТАВЬ СВОЮ ССЫЛКУ -->
+        <a class="cta" href="https://en.wikipedia.org/wiki/Jorunna_parva" target="_blank" rel="noopener">🔗 Открыть вики</a>
+        <p class="tip">Замени <code>href</code> на нужный URL.</p>
+      </article>
+      <article class="card">
+        <h3>Pressure — страница проекта</h3>
+        <!-- ВСТАВЬ ССЫЛКУ НА ИГРУ -->
+        <a class="cta" href="https://pressure.fandom.com/wiki/Deep_Sea_Bunnies" target="_blank" rel="noopener">🎮 Открыть Pressure</a>
+        <p class="tip">Можно указать Discord/Roblox/Steam-страницу.</p>
+      </article>
+    </section>
+
+    <div class="footer">© Сделано тобой. Можешь свободно редактировать тексты, кнопки и картинки.</div>
+  </main>
+
+  <script>
+    // Плавная прокрутка по сайдбару
+    document.querySelectorAll('nav a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+
+    // Табы Природа / Pressure
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+    tabs.forEach(t=>{
+      t.addEventListener('click', ()=>{
+        tabs.forEach(x=>x.classList.remove('active'));
+        panels.forEach(p=>p.classList.remove('active'));
+        t.classList.add('active');
+        const id = t.dataset.tab;
+        document.getElementById(id).classList.add('active');
+      });
+    });
+
+    // Пример: программно поменять ссылку баннера (можно удалить)
+    // ВСТАВЬ СВОЙ URL НИЖЕ, ЕСЛИ УДОБНО РЕДАКТИРОВАТЬ ТУТ
+    // document.getElementById('heroLink').href = 'https://твой-сайт/морской-кролик';
+  </script>
+</body>
+</html>
